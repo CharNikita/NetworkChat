@@ -11,6 +11,9 @@ public class Connection {
     private final BufferedReader in;
     private final BufferedWriter out;
 
+    public Connection(ConnectionListener eventListener, String IP, int port) throws IOException {
+        this(new Socket(IP, port), eventListener);
+    }
 
     public Connection(Socket socket, ConnectionListener eventListener) throws IOException {
         this.eventListener = eventListener;
