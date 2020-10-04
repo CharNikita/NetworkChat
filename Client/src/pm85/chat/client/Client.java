@@ -54,7 +54,8 @@ public class Client extends JFrame  implements ActionListener, ConnectionListene
             return;
         }
         fieldInput.setText(null);
-        connection.sendMessage(fieldNickName.getText() + ": " + message);
+        message = fieldNickName.getText() + ": " + reverseString(message);
+        connection.sendMessage(message);
 
     }
 
@@ -84,5 +85,9 @@ public class Client extends JFrame  implements ActionListener, ConnectionListene
             log.append(message + "\n");
             log.setCaretPosition(log.getDocument().getLength());
         });
+    }
+
+    public static String reverseString(String str) {
+        return new StringBuilder(str).reverse().toString();
     }
 }
