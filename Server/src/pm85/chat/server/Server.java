@@ -17,7 +17,7 @@ public class Server implements ConnectionListener {
     }
 
     private Server() {
-        try (ServerSocket serverSocket = new ServerSocket(8081)) {
+        try (ServerSocket serverSocket = new ServerSocket(80)) {
             while (true) {
                 try {
                     new Connection(serverSocket.accept(), this);
@@ -26,7 +26,7 @@ public class Server implements ConnectionListener {
                 }
             }
         } catch (IOException e) {
-            throw  new RuntimeException(e);
+            throw new RuntimeException(e);
         }
 
     }
@@ -34,18 +34,18 @@ public class Server implements ConnectionListener {
     @Override
     public synchronized void onConnectionReady(Connection connection) {
         connections.add(connection);
-        sendMessageTo(connections, "Client connected" + connection);
+        sendMessageToAll("Client connected   " + connection);
     }
 
     @Override
     public synchronized void onReceiveString(Connection connection, String string) {
-        sendMessageTo(connections, string);
+        sendMessageToAll(string);
     }
 
     @Override
     public synchronized void onDisconnect(Connection connection) {
         connections.remove(connection);
-        sendMessageTo(connections, "Client disconnected" + connection);
+        sendMessageToAll("Client disconnected" + connection);
     }
 
     @Override
@@ -53,8 +53,10 @@ public class Server implements ConnectionListener {
         e.printStackTrace();
     }
 
-    private void sendMessageTo(List<Connection> connections, String message) {
-        connections.forEach(connection -> connection.sendMessage(message));
+    private void sendMessageToAll(String message) {
+        for (Connection connection : connections) {
+            connection.sendMessage(message);
+        }
     }
 
 }

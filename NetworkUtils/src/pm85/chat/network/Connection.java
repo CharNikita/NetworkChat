@@ -41,7 +41,7 @@ public class Connection {
 
     public synchronized void sendMessage(String message) {
         try {
-            out.write(message + "/r/n");
+            out.write(message + "\r\n");
             out.flush();
         } catch (IOException e) {
             eventListener.onException(Connection.this, e);
