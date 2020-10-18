@@ -17,7 +17,8 @@ public class Server implements ConnectionListener {
     }
 
     private Server() {
-        try (ServerSocket serverSocket = new ServerSocket(1234)) {
+        try (ServerSocket serverSocket = new ServerSocket(2002)) {
+            System.out.println("Server has been started...");
             while (true) {
                 try {
                     new Connection(serverSocket.accept(), this);
@@ -33,19 +34,22 @@ public class Server implements ConnectionListener {
 
     @Override
     public synchronized void onConnectionReady(Connection connection) {
+        System.out.println("Client connected   " + connection);
         connections.add(connection);
         sendMessageToAll("Client connected   " + connection);
     }
 
     @Override
     public synchronized void onReceiveString(Connection connection, String string) {
+        System.out.println("Receive string: " + string);
         sendMessageToAll(string);
     }
 
     @Override
     public synchronized void onDisconnect(Connection connection) {
+        System.out.println("Client disconnected   " + connection);
         connections.remove(connection);
-        sendMessageToAll("Client disconnected" + connection);
+        sendMessageToAll("Client disconnected   " + connection);
     }
 
     @Override
